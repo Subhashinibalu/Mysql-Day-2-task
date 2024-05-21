@@ -1,11 +1,21 @@
-use zenclassdb;
+use zenclassdbdesign;
 create table mentor(mentor_id int primary key, mentor_name varchar(25));
 
-create table batch(batch_id int primary key, batch_name varchar(20),mentor_id int, foreign key (mentor_id) references mentor(mentor_id));
+create table queries(query_id int primary key, query varchar(300));
 
-create table course(course_id int primary key, course_name varchar(20),duration varchar(25),batch_id int, mentor_id int, foreign key (mentor_id) references mentor(mentor_id),
-foreign key (batch_id) references batch(batch_id));
+create table feedback(feedback_id int primary key, feedback_content varchar(300));
 
-create table student(student_id int primary key, student_name varchar(30), course_id int, batch_id int, mentor_id int,foreign key (mentor_id) references mentor(mentor_id),
-foreign key (batch_id) references batch(batch_id), foreign key (course_id) references course(course_id));
+create table roadmap(roadmap_day int primary key, topic varchar(30), mentor_id int, feedback_id int, 
+ foreign key (mentor_id) references mentor(mentor_id),foreign key (feedback_id) references feedback(feedback_id));
+ 
+create table additional(additional_classday int primary key, additional_topic varchar(30), feedback_id int, mentor_id int, 
+foreign key (feedback_id) references feedback(feedback_id), foreign key (mentor_id) references mentor(mentor_id));
 
+create table batch(batch_id int primary key, batch_name varchar(20),mentor_id int,roadmap_day int,additional_classday int,
+ foreign key (mentor_id) references mentor(mentor_id),foreign key (roadmap_day) references roadmap(roadmap_day),foreign key (additional_classday) references additional(additional_classday));
+
+create table course(course_id int primary key, course_name varchar(20),duration varchar(25),batch_id int, mentor_id int, 
+foreign key (mentor_id) references mentor(mentor_id),foreign key (batch_id) references batch(batch_id));
+
+create table student(student_id int primary key, student_name varchar(30), course_id int, batch_id int, mentor_id int,query_id int,foreign key (mentor_id) references mentor(mentor_id),
+foreign key (batch_id) references batch(batch_id), foreign key (course_id) references course(course_id),foreign key(query_id) references queries(query_id));
