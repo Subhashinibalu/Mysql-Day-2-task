@@ -1,0 +1,11 @@
+use zenclassdb;
+create table mentor(mentor_id int primary key, mentor_name varchar(25));
+
+create table batch(batch_id int primary key, batch_name varchar(20),mentor_id int, foreign key (mentor_id) references mentor(mentor_id));
+
+create table course(course_id int primary key, course_name varchar(20),duration varchar(25),batch_id int, mentor_id int, foreign key (mentor_id) references mentor(mentor_id),
+foreign key (batch_id) references batch(batch_id));
+
+create table student(student_id int primary key, student_name varchar(30), course_id int, batch_id int, mentor_id int,foreign key (mentor_id) references mentor(mentor_id),
+foreign key (batch_id) references batch(batch_id), foreign key (course_id) references course(course_id));
+
